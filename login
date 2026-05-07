@@ -3,63 +3,110 @@ import flet_video as ftv
 import math
 
 def main(page: ft.Page):
-    images = [f"images/img{i}.png" for i in range(6)]
+    movie = {
+        "title": "Jordan vs The World",
+        "genre": "Suspense / Action",
+        "synopsis": "The planet's destiny in the most unprobable hands.",
+        "image": "img0.png",
+    }
 
-    #Controls
+    movie2 = {
+        "title": "Jordan vs Jay",
+        "genre": "Suspense / Action",
+        "synopsis": "The most powerful weapon in wrong hands: who will wield it?.",
+        "image": "img0.png",
+    }
+    def toggle_details(e):
+        details.visible = not details.visible
 
-    max_carousel_controls = 4
-    carousel_shift = 0
+    def toggle_details1(e):
+        details1.visible = not details1.visible
 
-    def carousel_next(e):
-        nonlocal carousel_shift
-        carousel_shift += 1
+    def movieplay(e):
+        page.controls.clear()
+        page.add(exit, stack)
 
-        carousel.controls.clear()
-        for i in range(carousel_shift, carousel_shift + max_carousel_controls):
-            image_index = i - (len(images) * math.floor(i / len(images)))
-            carousel.controls.append(ft.Container(image = ft.DecorationImage(src = images[image_index]), width = 265, height = 160, on_click = on_click1))
-            
+    def movieplay1(e):
+        page.controls.clear()
+        page.add(exit, stack2)
 
-    def carousel_previous(e):
-        nonlocal carousel_shift
-        carousel_shift -= 1
-
-        carousel.controls.clear()
-        for i in range(carousel_shift, carousel_shift + max_carousel_controls):
-            image_index = i - (len(images) * math.floor(i / len(images)))
-            carousel.controls.append(ft.Container(image = ft.DecorationImage(src = images[image_index]), width = 265, height = 160, on_click = on_click1))
-    
-    def on_click1(e):
-        #Jordan's part
-        page.add(ft.Button(content = "Play", on_click = movie))
-        pass
-
-    carousel = ft.Row(
-        controls = [ft.Container(image = ft.DecorationImage(src = images[i]), width = 265, height = 160, on_click = on_click1) for i in range(carousel_shift, max_carousel_controls + carousel_shift)],
-        alignment = ft.CrossAxisAlignment.CENTER
+    # Controls
+    details = ft.Column(
+        visible=False,
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        controls=[
+            ft.Text(movie["genre"], size=18, weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.WHITE),
+            ft.Text(movie["synopsis"], size=14,
+                    text_align=ft.TextAlign.CENTER,
+                    color=ft.Colors.WHITE),
+            ft.Button(content="Play", width=120, on_click = movieplay),
+        ],
     )
 
-    carousel_next_button = ft.Button(content = "▶", on_click = carousel_next)
-    carousel_previous_button = ft.Button(content = "◀", on_click = carousel_previous)
+    details1 = ft.Column(
+        visible=False,
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        controls=[
+            ft.Text(movie2["genre"], size=18, weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.WHITE),
+            ft.Text(movie2["synopsis"], size=14,
+                    text_align=ft.TextAlign.CENTER,
+                    color=ft.Colors.WHITE),
+            ft.Button(content="Play", width=120, on_click = movieplay1),
+        ],
+    )
+
+    thumb1 = ft.Container(
+        width=380,
+        height=570,
+        border_radius=10,
+        on_click=toggle_details,
+        content=ft.Image(
+            src=("images/img0.png"),
+            fit=ft.BoxFit.COVER,
+            width=380,
+            height=570,
+            border_radius=10,
+        ),
+    )
+
+    thumb2 = ft.Container(
+        width=380,
+        height=570,
+        border_radius=10,
+        on_click=toggle_details1,
+        content=ft.Image(
+            src=("images/img1.png"),
+            fit=ft.BoxFit.COVER,
+            width=380,
+            height=570,
+            border_radius=10,
+        ),
+    )
+
+    thumbnails = ft.Row(controls = [thumb1, thumb2], alignment = "center")
+    detail = ft.Row(controls = [details, details1], alignment = "center")
+    containermov = ft.Container()
+    #Controls
+    
+    layout = ft.Column(
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        controls=[thumbnails, detail],
+    )
     
     def show_form(e):
         page.controls.clear()
         
         page.add(containerlog2)
-    
-    def movie(e):
-        page.controls.clear()
-        page.add(exit, stack)
 
     def moviepage(e):
         page.controls.clear()
         page.add(
-        carousel,
-        ft.Row(
-            controls = [carousel_previous_button, carousel_next_button],
-            alignment = ft.CrossAxisAlignment.CENTER
-        )
-        )
+        layout)
         
     logintext = ft.Text("Login", size=40, weight=ft.FontWeight.BOLD)
     name1 = ft.TextField(label="First Name")
@@ -75,7 +122,7 @@ def main(page: ft.Page):
         width = 520,
         height = 720,
         bgcolor = ft.Colors.BLUE_GREY_200,
-        border = ft.Border.all(3, ft.Colors.BLUE_500),
+        border = ft.Border.all(3, ft.Colors.BLUE_GREY_500),
         border_radius = 15,
         content = ft.Column(controls = [logintext, name1, name2, age, username, email, password, regibutton],
                             alignment = "center", horizontal_alignment = "center"))
@@ -104,8 +151,19 @@ def main(page: ft.Page):
 
     #Controls
     videos = [ftv.VideoMedia("https://1drv.ms/v/c/4cc49e5504c17ff1/IQAKrUPyx40pS6U_f1J-RmG-AVWAGFKa-B401-D40SFZ9oo?e=abCS8h")]
+    videos2 = [ftv.VideoMedia("https://1drv.ms/v/c/4cc49e5504c17ff1/IQCfaDpdZiIbQr-W6jT0Yrr4ATTQv9Qa3FayUIkJcK_9dPM?e=nqkNeo")]
     video1 = ftv.Video(
                         playlist = videos,
+                        playlist_mode=ftv.PlaylistMode.LOOP,
+                        fill_color=ft.Colors.BLUE_400,
+                        aspect_ratio = 12/5,
+                        volume=100,
+                        autoplay=False,
+                        filter_quality=ft.FilterQuality.HIGH,
+                        muted=False)
+    
+    video2 = ftv.Video(
+                        playlist = videos2,
                         playlist_mode=ftv.PlaylistMode.LOOP,
                         fill_color=ft.Colors.BLUE_400,
                         aspect_ratio = 12/5,
@@ -119,6 +177,9 @@ def main(page: ft.Page):
     seekrow = ft.Row(controls = [seekbutton2, seekbutton], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
     stack = ft.Stack(controls = [video1, seekrow])
     exit = ft.Button(content = "⨉", on_click = moviepage, align = ft.Alignment.TOP_LEFT)
+
+    stack = ft.Stack(controls = [video1, seekrow])
+    stack2 = ft.Stack(controls = [video2, seekrow])
     
     page.title = "Cinebrary"
     
