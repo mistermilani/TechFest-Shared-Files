@@ -89,34 +89,47 @@ def main(page: ft.Page):
 
     thumbnails = ft.Row(controls = [thumb1, thumb2], alignment = "center")
     detail = ft.Row(controls = [details, details1], alignment = "center")
-    containermov = ft.Container()
     #Controls
+    verifytext = ft.Text(value = "")
     
     layout = ft.Column(
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         controls=[thumbnails, detail],
     )
+
+    containermov = ft.Container(height = 800, width = 1100,
+        bgcolor = ft.Colors.BLUE_GREY_200,
+        border = ft.Border.all(3, ft.Colors.BLUE_GREY_500),
+        border_radius = 15,
+        content = ft.Column(controls = [layout],
+                            alignment = "center", horizontal_alignment = "center"))
     
     def show_form(e):
         page.controls.clear()
-        
         page.add(containerlog2)
+    
+    def verifyUser(e):
+        values = [bool(name1.value), bool(name2.value), bool(age.value), bool(username.value), bool(email.value), bool(password.value)]
+        if False in values:
+            verifytext.value = "There are missing values."
+        else:
+            verifytext.value = ""
+            moviepage()
 
-    def moviepage(e):
+    def moviepage():
         page.controls.clear()
         page.add(
-        layout)
+        containermov)
         
-    logintext = ft.Text("Login", size=40, weight=ft.FontWeight.BOLD)
+    logintext = ft.Text("Login", size=40, weight=ft.FontWeight.BOLD, color = ft.Colors.BLACK)
     name1 = ft.TextField(label="First Name")
     name2 = ft.TextField(label="Last Name")
     age = ft.TextField(label="Age")
     username = ft.TextField(label="Username")
     email = ft.TextField(label="Email")
     password = ft.TextField(label="Password", password=True)
-    regibutton = ft.Button("Register", on_click = moviepage)
-
+    regibutton = ft.Button("Register", on_click = verifyUser)
     
     containerlog2 = ft.Container(
         width = 520,
@@ -124,7 +137,7 @@ def main(page: ft.Page):
         bgcolor = ft.Colors.BLUE_GREY_200,
         border = ft.Border.all(3, ft.Colors.BLUE_GREY_500),
         border_radius = 15,
-        content = ft.Column(controls = [logintext, name1, name2, age, username, email, password, regibutton],
+        content = ft.Column(controls = [logintext, name1, name2, age, username, email, password, regibutton, verifytext],
                             alignment = "center", horizontal_alignment = "center"))
     
     async def videoseek(e):
@@ -150,8 +163,8 @@ def main(page: ft.Page):
         await video1.seek(new_position)
 
     #Controls
-    videos = [ftv.VideoMedia("https://1drv.ms/v/c/4cc49e5504c17ff1/IQAKrUPyx40pS6U_f1J-RmG-AVWAGFKa-B401-D40SFZ9oo?e=abCS8h")]
-    videos2 = [ftv.VideoMedia("https://1drv.ms/v/c/4cc49e5504c17ff1/IQCfaDpdZiIbQr-W6jT0Yrr4ATTQv9Qa3FayUIkJcK_9dPM?e=nqkNeo")]
+    videos = [ftv.VideoMedia("https://github.com/mistermilani/Assets/raw/refs/heads/main/Videos/TechFestMovie.mp4")]
+    videos2 = [ftv.VideoMedia("https://github.com/mistermilani/Assets/raw/refs/heads/main/Videos/TechFestMovie2.mp4")]
     video1 = ftv.Video(
                         playlist = videos,
                         playlist_mode=ftv.PlaylistMode.LOOP,
@@ -183,13 +196,6 @@ def main(page: ft.Page):
     
     page.title = "Cinebrary"
     
-    subtitle = ft.Text(
-        value="Start now",
-        size=16,
-        
-        text_align=ft.TextAlign.CENTER
-    )
- 
     button = ft.Button(
         content="Login",
         on_click=show_form
@@ -205,8 +211,6 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
 
     #Controls
-    subtitle = ft.Text(value="Start now", size = 16)
-
     logo = ft.Container(image = ft.DecorationImage(src = "images/cinebrary1.png"), width = 385, height = 76)
     containerlog1 = ft.Container(
         width = 520,
@@ -215,7 +219,7 @@ def main(page: ft.Page):
         border = ft.Border.all(3, ft.Colors.BLUE_500),
         border_radius = 15,
         content = ft.Column(controls = [
-            logo, subtitle, button],
+            logo, button],
             alignment = "center", horizontal_alignment = "center"
             )
         )
